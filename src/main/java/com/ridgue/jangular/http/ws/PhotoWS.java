@@ -56,7 +56,7 @@ public class PhotoWS {
     }
 
     @PostMapping("photo/upload")
-    public ResponseEntity<?> UploadFile(@RequestBody Photo photo) throws IOException {
+    public ResponseEntity<?> UploadFile(@RequestBody Photo photo) {
         try {
             return ResponseEntity.ok(photoUserCase.save(photo));
         } catch (Exception e) {
