@@ -1,10 +1,7 @@
 package com.ridgue.jangular.http.ws;
 import com.ridgue.jangular.database.entity.User;
 import com.ridgue.jangular.database.repository.UserRepository;
-import com.ridgue.jangular.exception.EmailAlreadyTakenException;
-import com.ridgue.jangular.exception.FailedSignInException;
-import com.ridgue.jangular.exception.ResourceNotFoundException;
-import com.ridgue.jangular.exception.UsernameAlreadyTakenException;
+import com.ridgue.jangular.exception.*;
 import com.ridgue.jangular.http.util.SignInForm;
 import com.ridgue.jangular.http.util.SignUpForm;
 import com.ridgue.jangular.http.util.Token;
@@ -71,7 +68,7 @@ public class UserWS {
             User user = userUseCase.signUp(signUp);
             URI uri = uriComponentsBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri();
             return ResponseEntity.created(uri).body(user);
-        } catch (EmailAlreadyTakenException | UsernameAlreadyTakenException e) {
+        } catch (EmailAlreadyTakenException | UsernameAlreadyTakenException | InvalidFieldDataException e) {
             return ResponseEntity.badRequest().build();
         }
     }
