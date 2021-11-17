@@ -5,7 +5,10 @@ import com.ridgue.jangular.database.entity.User;
 import com.ridgue.jangular.database.repository.PhotoRepository;
 import com.ridgue.jangular.database.repository.UserRepository;
 import com.ridgue.jangular.exception.EmailAlreadyTakenException;
+<<<<<<< HEAD
 import com.ridgue.jangular.exception.InvalidFieldDataException;
+=======
+>>>>>>> 322c7e44701070e3ffa9b533ea36da799adc34f9
 import com.ridgue.jangular.exception.ResourceNotFoundException;
 import com.ridgue.jangular.exception.UsernameAlreadyTakenException;
 import com.ridgue.jangular.http.util.SignUpForm;
@@ -39,7 +42,7 @@ public class UserUseCase {
     }
 
     public User signUp(SignUpForm signUpForm) {
-        validUser(signUpForm);
+        validUser(signUpForm.getUsername(), signUpForm.getEmail());
 
         User user = new User(signUpForm.getUsername(), signUpForm.getPassword(), signUpForm.getEmail());
         repo.save(user);
@@ -47,9 +50,10 @@ public class UserUseCase {
         return user;
     }
 
-    public void validUser(SignUpForm signUpForm) {
-        if (signUpForm.getUsername().length() < 6 || signUpForm.getPassword().length() <= 8) throw new InvalidFieldDataException();
-        if (repo.findByEmail(signUpForm.getEmail()) != null) throw new EmailAlreadyTakenException();
-        if (repo.findByUsername(signUpForm.getUsername()) != null) throw new UsernameAlreadyTakenException();
+    public boolean validUser(String username, String email) {
+        if (repo.findByEmail(email) != null) throw new EmailAlreadyTakenException();
+        if (repo.findByUsername(username) != null) throw new UsernameAlreadyTakenException();
+
+        return true;
     }
 }
