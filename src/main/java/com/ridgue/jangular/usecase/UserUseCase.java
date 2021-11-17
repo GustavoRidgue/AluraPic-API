@@ -1,20 +1,12 @@
 package com.ridgue.jangular.usecase;
 
-import com.ridgue.jangular.database.entity.Photo;
 import com.ridgue.jangular.database.entity.User;
-import com.ridgue.jangular.database.repository.PhotoRepository;
 import com.ridgue.jangular.database.repository.UserRepository;
 import com.ridgue.jangular.exception.EmailAlreadyTakenException;
-<<<<<<< HEAD
-import com.ridgue.jangular.exception.InvalidFieldDataException;
-=======
->>>>>>> 322c7e44701070e3ffa9b533ea36da799adc34f9
 import com.ridgue.jangular.exception.ResourceNotFoundException;
 import com.ridgue.jangular.exception.UsernameAlreadyTakenException;
 import com.ridgue.jangular.http.util.SignUpForm;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

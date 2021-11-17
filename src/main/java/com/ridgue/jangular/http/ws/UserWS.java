@@ -1,14 +1,11 @@
 package com.ridgue.jangular.http.ws;
 import com.ridgue.jangular.database.entity.User;
 import com.ridgue.jangular.database.repository.UserRepository;
-<<<<<<< HEAD
 import com.ridgue.jangular.exception.*;
-=======
 import com.ridgue.jangular.exception.EmailAlreadyTakenException;
 import com.ridgue.jangular.exception.FailedSignInException;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
 import com.ridgue.jangular.exception.UsernameAlreadyTakenException;
->>>>>>> 322c7e44701070e3ffa9b533ea36da799adc34f9
 import com.ridgue.jangular.http.util.SignInForm;
 import com.ridgue.jangular.http.util.SignUpForm;
 import com.ridgue.jangular.http.util.Token;
@@ -16,7 +13,6 @@ import com.ridgue.jangular.usecase.AuthenticateUseCase;
 import com.ridgue.jangular.usecase.UserUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -75,11 +71,7 @@ public class UserWS {
             User user = userUseCase.signUp(signUp);
             URI uri = uriComponentsBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri();
             return ResponseEntity.created(uri).body(user);
-<<<<<<< HEAD
         } catch (EmailAlreadyTakenException | UsernameAlreadyTakenException | InvalidFieldDataException e) {
-=======
-        } catch (EmailAlreadyTakenException | UsernameAlreadyTakenException e) {
->>>>>>> 322c7e44701070e3ffa9b533ea36da799adc34f9
             return ResponseEntity.badRequest().build();
         }
     }
