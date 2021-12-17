@@ -72,7 +72,10 @@ public class PhotoUseCase {
         comment.setUsername(comment.getUser().getUsername());
         photoCommentRepository.save(comment);
 
+        photo.setNumberOfComments(photo.getNumberOfComments() + 1);
         photo.addComment(comment);
+
+        photoRepository.save(photo);
 
         return comment;
     }
