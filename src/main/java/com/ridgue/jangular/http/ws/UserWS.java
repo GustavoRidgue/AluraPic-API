@@ -1,6 +1,7 @@
 package com.ridgue.jangular.http.ws;
 import com.ridgue.jangular.database.entity.User;
 import com.ridgue.jangular.database.repository.UserRepository;
+import com.ridgue.jangular.exception.*;
 import com.ridgue.jangular.exception.EmailAlreadyTakenException;
 import com.ridgue.jangular.exception.FailedSignInException;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
@@ -12,7 +13,6 @@ import com.ridgue.jangular.usecase.AuthenticateUseCase;
 import com.ridgue.jangular.usecase.UserUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -71,7 +71,7 @@ public class UserWS {
             User user = userUseCase.signUp(signUp);
             URI uri = uriComponentsBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri();
             return ResponseEntity.created(uri).body(user);
-        } catch (EmailAlreadyTakenException | UsernameAlreadyTakenException e) {
+        } catch (EmailAlreadyTakenException | UsernameAlreadyTakenException | InvalidFieldDataException e) {
             return ResponseEntity.badRequest().build();
         }
     }
