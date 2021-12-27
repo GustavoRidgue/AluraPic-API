@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface PhotoCommentRepository extends JpaRepository<PhotoComment, Long> {
-    List<Photo> findByUserId(Long id);
+
 }

@@ -57,11 +57,6 @@ public class Photo {
         numberOfComments = comments.size();
     }
 
-    public void removeComment(PhotoComment comment) {
-        comments.remove(comment);
-        comment.setPhoto(null);
-    }
-
     public Photo(String description, String url, User user) {
         this.description = description;
         this.url = url;

@@ -24,8 +24,8 @@ public class JangularApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String...args) throws Exception {
-		this.userRepository.save(new User("gustavo", "gubimapa", "gustavo.ridgue@gmail.com"));
-		this.userRepository.save(new User("gabriel", "gubimapa", "gabriel.barbosa@gmail.com"));
+		this.userRepository.save(new User("gustavo", "senhadogu", "gustavo.sobrenome@gmail.com"));
+		this.userRepository.save(new User("gabriel", "senhadobiel", "gabriel.sobrenome@gmail.com"));
 		this.userRepository.save(new User("teste", "123", "teste@gmail.com"));
 		this.userRepository.save(new User("t", "1", "teste@gmail.com"));
 //

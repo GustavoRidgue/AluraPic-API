@@ -1,19 +1,17 @@
-package com.ridgue.jangular.usecase;
+package com.ridgue.jangular.usecase.photo;
 
 import com.ridgue.jangular.database.entity.Photo;
-import com.ridgue.jangular.database.entity.User;
 import com.ridgue.jangular.database.entity.PhotoComment;
+import com.ridgue.jangular.database.entity.User;
 import com.ridgue.jangular.database.repository.PhotoCommentRepository;
 import com.ridgue.jangular.database.repository.PhotoRepository;
 import com.ridgue.jangular.database.repository.UserRepository;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
-import com.ridgue.jangular.exception.UnauthorizedException;
 import com.ridgue.jangular.http.util.CommentPhotoForm;
-import com.ridgue.jangular.http.util.DeletePhotoForm;
+import com.ridgue.jangular.http.util.DeleteCommentForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -31,8 +29,6 @@ public class PhotoUseCase {
         Photo photo = photoRepository.findById(id).orElse(null);
         if (photo == null) throw new ResourceNotFoundException();
 
-//        if (!photo.getComments().isEmpty()) System.out.println("has comments: " + photo.getComments());
-//        if (photo.getComments().isEmpty()) System.out.println("hasn't comments");
         return photo;
     }
 
@@ -46,8 +42,6 @@ public class PhotoUseCase {
     }
 
     public Photo save(Photo photo) {
-//        User user = new User("jfknrfkr", "nfdfjekf", "nckjrsniu@Nujfrnk");
-//        photo.setUser(user);
         photoRepository.save(photo);
         return photo;
     }
@@ -70,20 +64,32 @@ public class PhotoUseCase {
 
         PhotoComment comment = new PhotoComment(form.getComment(), user, photo);
         comment.setUsername(comment.getUser().getUsername());
-        photoCommentRepository.save(comment);
-
         photo.addComment(comment);
+
+        photoCommentRepository.save(comment);
 
         return comment;
     }
 
-    public void deletePhoto(Long id) {
-//        Photo photo = photoRepository.findById(deletePhotoForm.getPhotoId()).orElse(null);
+    public void deleteComment(DeleteCommentForm deleteCommentForm) throws Exception {
+        Photo photo =
+                photoRepository.findById(deleteCommentForm.getPhotoId()).orElse(null);
 
-        if (photoRepository.findById(id).orElse(null) == null)
-            throw new ResourceNotFoundException();
-//        if (photo.getUser().getId() != deletePhotoForm.getUser().getId()) throw new UnauthorizedException();
+        PhotoComment comment =
+                photoCommentRepository.findById(deleteCommentForm.getPhotoCommentId()).orElse(null);
 
-        photoRepository.deleteById(id);
+        if (photo == null || comment == null) throw new ResourceNotFoundException();
+        if (comment.getPhoto().getId() != photo.getId() ||
+                comment.getUser().getId() != deleteCommentForm.getUserId()) throw new IllegalArgumentException();
+
+        photo.setNumberOfComments(photo.getNumberOfComments() - 1);
+
+        List<PhotoComment> newComments = photo.getComments();
+        newComments.remove(comment);
+
+        photo.setComments(newComments);
+
+        photoCommentRepository.deleteById(comment.getId());
+        photoRepository.save(photo);
     }
 }

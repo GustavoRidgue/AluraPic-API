@@ -2,15 +2,13 @@ package com.ridgue.jangular.http.ws;
 import com.ridgue.jangular.database.entity.Photo;
 import com.ridgue.jangular.database.entity.PhotoComment;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
-import com.ridgue.jangular.exception.UnauthorizedException;
 import com.ridgue.jangular.http.util.CommentPhotoForm;
-import com.ridgue.jangular.http.util.DeletePhotoForm;
-import com.ridgue.jangular.usecase.PhotoUseCase;
+import com.ridgue.jangular.http.util.DeleteCommentForm;
+import com.ridgue.jangular.usecase.photo.PhotoUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -65,7 +63,7 @@ public class PhotoWS {
     }
 
     @GetMapping("photo/{id}/comments")
-    public ResponseEntity<List<PhotoComment>> getPhotos(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<List<PhotoComment>> getPhotoComments(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(photoUserCase.listComments(id));
     }
 
@@ -78,15 +76,15 @@ public class PhotoWS {
         }
     }
 
-    @DeleteMapping("photo/delete/{id}")
-    public ResponseEntity<?> commentPhoto(@PathVariable(name = "id") Long id) {
+    @DeleteMapping("photo/comment/delete")
+    public ResponseEntity<?> deleteComment(@RequestBody DeleteCommentForm deleteCommentForm) throws Exception {
         try {
-            photoUserCase.deletePhoto(id);
+            photoUserCase.deleteComment(deleteCommentForm);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
-        } catch (UnauthorizedException e) {
-            return ResponseEntity.status(403).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
