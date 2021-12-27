@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PhotoWS {
     private final PhotoUseCase photoUserCase;
-    private final Path root = Paths.get("uploads");
 
     @GetMapping("photo")
     public ResponseEntity<List<Photo>> getPhotos() {
