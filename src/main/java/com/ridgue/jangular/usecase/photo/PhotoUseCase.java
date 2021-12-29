@@ -9,6 +9,7 @@ import com.ridgue.jangular.database.repository.UserRepository;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
 import com.ridgue.jangular.http.util.CommentPhotoForm;
 import com.ridgue.jangular.http.util.DeleteCommentForm;
+import com.ridgue.jangular.http.util.LikePhotoForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -91,5 +92,37 @@ public class PhotoUseCase {
 
         photoCommentRepository.deleteById(comment.getId());
         photoRepository.save(photo);
+    }
+
+    public void like(LikePhotoForm form) {
+        Photo photo = photoRepository.findById(form.getPhotoId()).orElse(null);
+        User user = userRepository.findById(form.getUserId()).orElse(null);
+
+        if (photo == null || user == null) throw new ResourceNotFoundException();
+
+        if (photo.getUsersIdLiked().contains(form.getUserId()) ||
+                user.getLikedPhotosId().contains(form.getPhotoId())) throw new IllegalArgumentException();
+
+        photo.like(form.getUserId());
+        user.like(form.getPhotoId());
+
+        photoRepository.save(photo);
+        userRepository.save(user);
+    }
+
+    public void dislike(LikePhotoForm form) {
+        Photo photo = photoRepository.findById(form.getPhotoId()).orElse(null);
+        User user = userRepository.findById(form.getUserId()).orElse(null);
+
+        if (photo == null || user == null) throw new ResourceNotFoundException();
+
+        if (!photo.getUsersIdLiked().contains(form.getUserId()) ||
+                !user.getLikedPhotosId().contains(form.getPhotoId())) throw new IllegalArgumentException();
+
+        photo.dislike(form.getUserId());
+        user.dislike(form.getPhotoId());
+
+        photoRepository.save(photo);
+        userRepository.save(user);
     }
 }

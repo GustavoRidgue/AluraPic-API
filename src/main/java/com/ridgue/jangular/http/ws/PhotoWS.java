@@ -4,6 +4,7 @@ import com.ridgue.jangular.database.entity.PhotoComment;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
 import com.ridgue.jangular.http.util.CommentPhotoForm;
 import com.ridgue.jangular.http.util.DeleteCommentForm;
+import com.ridgue.jangular.http.util.LikePhotoForm;
 import com.ridgue.jangular.usecase.photo.PhotoUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,8 @@ public class PhotoWS {
             return ResponseEntity.ok(photoUserCase.comment(form));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -79,6 +82,30 @@ public class PhotoWS {
     public ResponseEntity<?> deleteComment(@RequestBody DeleteCommentForm deleteCommentForm) throws Exception {
         try {
             photoUserCase.deleteComment(deleteCommentForm);
+            return ResponseEntity.ok().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("photo/like")
+    public ResponseEntity<?> likePhoto(@RequestBody LikePhotoForm likePhotoForm) {
+        try {
+            photoUserCase.like(likePhotoForm);
+            return ResponseEntity.ok().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("photo/dislike")
+    public ResponseEntity<?> dislikeComment(@RequestBody LikePhotoForm dislikePhotoForm) throws Exception {
+        try {
+            photoUserCase.dislike(dislikePhotoForm);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();

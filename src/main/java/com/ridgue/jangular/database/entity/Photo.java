@@ -39,8 +39,12 @@ public class Photo {
     )
     private List<PhotoComment> comments;
 
-    @Column(nullable = false)
-    private int numberOfComments;
+    private Long numberOfComments;
+
+    private Long numberOfLikes;
+
+    @ElementCollection(targetClass=Long.class)
+    private List<Long> usersIdLiked;
 
     @Column(nullable = false)
     @CreationTimestamp
@@ -54,7 +58,17 @@ public class Photo {
         comments.add(comment);
         comment.setPhoto(this);
 
-        numberOfComments = comments.size();
+        numberOfComments = Long.parseLong(String.valueOf(comments.size()));
+    }
+
+    public void like(Long userId) {
+        usersIdLiked.add(userId);
+        numberOfLikes = Long.parseLong(String.valueOf(usersIdLiked.size()));
+    }
+
+    public void dislike(Long userId) {
+        usersIdLiked.remove(userId);
+        numberOfLikes = Long.parseLong(String.valueOf(usersIdLiked.size()));
     }
 
     public Photo(String description, String url, User user) {
