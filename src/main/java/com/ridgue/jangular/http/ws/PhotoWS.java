@@ -2,8 +2,10 @@ package com.ridgue.jangular.http.ws;
 import com.ridgue.jangular.database.entity.Photo;
 import com.ridgue.jangular.database.entity.PhotoComment;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
+import com.ridgue.jangular.exception.UnauthorizedException;
 import com.ridgue.jangular.http.util.CommentPhotoForm;
 import com.ridgue.jangular.http.util.DeleteCommentForm;
+import com.ridgue.jangular.http.util.DeletePhotoForm;
 import com.ridgue.jangular.http.util.LikePhotoForm;
 import com.ridgue.jangular.usecase.photo.PhotoUseCase;
 import lombok.AllArgsConstructor;
@@ -62,9 +64,27 @@ public class PhotoWS {
         }
     }
 
+    @DeleteMapping("photo/delete")
+    public ResponseEntity<?> deletePhoto(@RequestBody DeletePhotoForm deletePhotoForm) {
+        try {
+            photoUserCase.deletePhoto(deletePhotoForm);
+            return ResponseEntity.ok().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(403).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("photo/{id}/comments")
     public ResponseEntity<List<PhotoComment>> getPhotoComments(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(photoUserCase.listComments(id));
+        try {
+            return ResponseEntity.ok(photoUserCase.listComments(id));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping("photo/comment")

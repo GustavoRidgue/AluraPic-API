@@ -7,8 +7,10 @@ import com.ridgue.jangular.database.repository.PhotoCommentRepository;
 import com.ridgue.jangular.database.repository.PhotoRepository;
 import com.ridgue.jangular.database.repository.UserRepository;
 import com.ridgue.jangular.exception.ResourceNotFoundException;
+import com.ridgue.jangular.exception.UnauthorizedException;
 import com.ridgue.jangular.http.util.CommentPhotoForm;
 import com.ridgue.jangular.http.util.DeleteCommentForm;
+import com.ridgue.jangular.http.util.DeletePhotoForm;
 import com.ridgue.jangular.http.util.LikePhotoForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -53,6 +55,22 @@ public class PhotoUseCase {
         if (photo == null) throw new ResourceNotFoundException();
 
         return photo.getComments();
+    }
+
+    public void deletePhoto(DeletePhotoForm deletePhotoForm) {
+        Photo photo =
+                photoRepository.findById(deletePhotoForm.getPhotoId()).orElse(null);
+
+        User user =
+                userRepository.findById(deletePhotoForm.getUser().getId()).orElse(null);
+
+        if (photo == null || user == null) throw new ResourceNotFoundException();
+        if (photo.getUser().getId() != user.getId() ||
+            photo.getUser().getId() != deletePhotoForm.getUser().getId()) throw new UnauthorizedException();
+
+
+
+        photoRepository.delete(photo);
     }
 
     public PhotoComment comment(CommentPhotoForm form) {
