@@ -8,8 +8,7 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/GustavoRidgue/AluraPic-API?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/GustavoRidgue/AluraPic-API?style=for-the-badge)
 
-> Project that simulates a social network of images. Still with little functionality, you can like, comment, delete and create a photo.
-See all photos, or see photos of that user. Browse logged in for a better experience.
+> API to send data to AluraPic.
 
 ## Front-end project that consume this API:
 [![card](https://github-readme-stats.vercel.app/api/pin/?username=GustavoRidgue&repo=AluraPic)](https://github.com/GustavoRidgue/AluraPic)
