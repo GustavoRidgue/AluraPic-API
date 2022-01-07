@@ -72,6 +72,7 @@ public class UserWS {
             URI uri = uriComponentsBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri();
             return ResponseEntity.created(uri).body(user);
         } catch (EmailAlreadyTakenException | UsernameAlreadyTakenException | InvalidFieldDataException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }

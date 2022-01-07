@@ -44,7 +44,8 @@ public class UserUseCase {
     }
 
     public void validUser(SignUpForm signUpForm) {
-        if (signUpForm.getPassword().length() <= 8 || signUpForm.getUsername().length() <= 5) throw new InvalidFieldDataException();
+        if (signUpForm.getPassword().length() <= 6 || signUpForm.getPassword().length() >= 14 ||
+            signUpForm.getUsername().length() <= 6 || signUpForm.getUsername().length() >= 30) throw new InvalidFieldDataException();
         if (repo.findByEmail(signUpForm.getEmail()) != null) throw new EmailAlreadyTakenException();
         if (repo.findByUsername(signUpForm.getUsername()) != null) throw new UsernameAlreadyTakenException();
     }
