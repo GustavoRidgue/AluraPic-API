@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table
 public class PhotoComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,7 @@ public class PhotoComment {
     private LocalDateTime posted = LocalDateTime.now();
     private String username;
     @OneToOne
+    @JoinColumn(name = "user")
     private User user;
     @JsonIgnore
     @ManyToOne

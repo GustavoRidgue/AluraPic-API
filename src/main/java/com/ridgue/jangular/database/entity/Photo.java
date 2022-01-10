@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,8 +72,9 @@ public class Photo {
         numberOfLikes = Long.parseLong(String.valueOf(usersIdLiked.size()));
     }
 
-    public Photo(String description, String url, User user) {
+    public Photo(String description, boolean allowComments, String url, User user) {
         this.description = description;
+        this.allowComments = allowComments;
         this.url = url;
         this.user = user;
     }
